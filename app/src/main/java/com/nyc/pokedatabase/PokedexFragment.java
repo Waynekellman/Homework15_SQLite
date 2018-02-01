@@ -81,7 +81,7 @@ public class PokedexFragment extends Fragment {
                 db = Room.databaseBuilder(getActivity().getApplicationContext(),
                         AppDatabase.class, "pokemonDatabaseModel").build();
                 pokemonDatabaseModels = db.pokemonDao().getAll();
-                Log.d(TAG, "setPokemonDatabaseRun: has ran " + pokemonDatabaseModels.size());
+                Log.d(TAG, "setPokemonDatabaseRun: has ran ");
                 db.close();
             }
         });
@@ -102,7 +102,7 @@ public class PokedexFragment extends Fragment {
                 Type typesType = new TypeToken<List<Types>>() {
                 }.getType();
                 List<Stats> stats = new Gson().fromJson(p.getStatsJson(), statsType);
-                List<Types> types = new Gson().fromJson(p.getTypes(), typesType);
+                List<Types> types = new Gson().fromJson(p.getTypesJson(), typesType);
                 int id = p.getPokemonId();
 
                 pokemons.add(new Pokemon(p.getPokemonName()

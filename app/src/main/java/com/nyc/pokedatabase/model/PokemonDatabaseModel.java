@@ -45,22 +45,12 @@ public class PokemonDatabaseModel {
         this.pokemonId = pokemonId;
     }
 
-    @Ignore
-
 
     public PokemonDatabaseModel() {
     }
 
-    public int getPokemonId() {
-        return pokemonId;
-    }
-
-    public void setPokemonId(int pokemonId) {
-        this.pokemonId = pokemonId;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public int getId() {
+        return id;
     }
 
     public void setPokemonName(String pokemonName) {
@@ -79,8 +69,12 @@ public class PokemonDatabaseModel {
         this.typesJson = typesJson;
     }
 
-    public int getId() {
-        return id;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setPokemonId(int pokemonId) {
+        this.pokemonId = pokemonId;
     }
 
     public String getTypesJson() {
@@ -99,7 +93,7 @@ public class PokemonDatabaseModel {
         return sprite;
     }
 
-    public String getTypes() {
-        return typesJson;
+    public int getPokemonId() {
+        return pokemonId;
     }
 }
