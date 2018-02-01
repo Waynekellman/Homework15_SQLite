@@ -2,12 +2,15 @@ package com.nyc.pokedatabase;
 
 import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nyc.pokedatabase.model.Pokemon;
@@ -17,7 +20,6 @@ import com.nyc.pokedatabase.model.objectsPokemon.Stats;
 import com.nyc.pokedatabase.model.objectsPokemon.Types;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,6 +58,8 @@ public class PokeStatsActivity extends AppCompatActivity {
         pokeName = intent.getStringExtra("pokeName");
         Log.d(TAG, "onCreate: " + pokeName);
         getPokemon();
+        setViews();
+
 
 
 
@@ -71,12 +75,20 @@ public class PokeStatsActivity extends AppCompatActivity {
         String stat4String = pokemon.getStats().get(3).getStat().getName() + ": " +pokemon.getStats().get(3).getBase_stat();
         String stat5String = pokemon.getStats().get(4).getStat().getName() + ": " +pokemon.getStats().get(4).getBase_stat();
         String stat6String = pokemon.getStats().get(5).getStat().getName() + ": " +pokemon.getStats().get(5).getBase_stat();
+        String defaultPicUrl = pokemon.getSprites().getFront_default();
+        String shinyPicUrl = pokemon.getSprites().getFront_shiny();
         stat1.setText(stat1String);
         stat2.setText(stat2String);
         stat3.setText(stat3String);
         stat4.setText(stat4String);
         stat5.setText(stat5String);
         stat6.setText(stat6String);
+        Glide.with(PokeStatsActivity.this)
+                .load(defaultPicUrl)
+                .into(defaultPic);
+        Glide.with(PokeStatsActivity.this)
+                .load(shinyPicUrl)
+                .into(shinyPic);
     }
 
     public void getPokemon() {
@@ -99,7 +111,6 @@ public class PokeStatsActivity extends AppCompatActivity {
                         public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
                             pokemon = response.body();
                             Log.d(TAG, "getPokemonResponse: " + pokemon.getName());
-                            setViews();
                             updatePokemonDatabaseModel();
 
                         }
@@ -139,6 +150,7 @@ public class PokeStatsActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
 
 
     }
