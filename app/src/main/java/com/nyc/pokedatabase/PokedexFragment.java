@@ -35,7 +35,6 @@ import java.util.List;
 public class PokedexFragment extends Fragment {
 
     private static final String TAG = "PokedexFragment";
-    private TextView textView;
     private AppDatabase db;
     private List<PokemonDatabaseModel> pokemonDatabaseModels;
     private List<Pokemon> pokemons;
@@ -97,20 +96,7 @@ public class PokedexFragment extends Fragment {
                 if (namesList.contains(p.getPokemonName())) {
                     continue;
                 }
-                Type statsType = new TypeToken<List<Stats>>() {
-                }.getType();
-                Type typesType = new TypeToken<List<Types>>() {
-                }.getType();
-                List<Stats> stats = new Gson().fromJson(p.getStatsJson(), statsType);
-                List<Types> types = new Gson().fromJson(p.getTypesJson(), typesType);
-                int id = p.getPokemonId();
-
-                pokemons.add(new Pokemon(p.getPokemonName()
-                        , stats
-                        , new Gson().fromJson(p.getSprite(), Sprites.class)
-                        , types, id));
-
-                namesList.add(p.getPokemonName());
+                addPokemonToListFromDB(p);
                 Log.d(TAG, "setPokemons: " + p.getId() + " " + p.getSprite());
                 Log.d(TAG, "setPokemons: " + pokemons.size() + " " + namesList.size());
             }
@@ -119,5 +105,11 @@ public class PokedexFragment extends Fragment {
             pokeAdapter.setPokemonList(pokemons);
         }
 
+    }
+
+    private void addPokemonToListFromDB(PokemonDatabaseModel p) {
+        pokemons.add(p.getPokemon());
+
+        namesList.add(p.getPokemonName());
     }
 }

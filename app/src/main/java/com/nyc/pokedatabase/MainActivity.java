@@ -101,19 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private void setPokemonList() {
         if (pokemonDatabaseModels.size() > 0) {
             for (PokemonDatabaseModel p : pokemonDatabaseModels) {
-
-                Type statsType = new TypeToken<List<Stats>>() {
-                }.getType();
-                Type typesType = new TypeToken<List<Types>>() {
-                }.getType();
-                List<Stats> stats = new Gson().fromJson(p.getStatsJson(), statsType);
-                List<Types> types = new Gson().fromJson(p.getTypesJson(), typesType);
-                int id = p.getPokemonId();
-
-                pokemons.add(new Pokemon(p.getPokemonName()
-                        , stats
-                        , new Gson().fromJson(p.getSprite(), Sprites.class)
-                        , types, id));
+            pokemons.add(p.getPokemon());
             }
         }
 
