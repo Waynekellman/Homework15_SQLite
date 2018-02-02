@@ -1,5 +1,6 @@
 package com.nyc.pokedatabase;
 
+import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,6 +37,7 @@ public class PokeStatsActivity extends AppCompatActivity {
     private TextView stat1,stat2,stat3,stat4,stat5,stat6;
     private ImageView defaultPic, shinyPic;
     private Retrofit retrofit;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -53,12 +55,17 @@ public class PokeStatsActivity extends AppCompatActivity {
         shinyPic = findViewById(R.id.shinyPicSts);
 
 
+        // Set up progress before call
+        progressDialog = new ProgressDialog(PokeStatsActivity.this);
+        progressDialog.setMessage("looking for pokeball ....");
+        progressDialog.setTitle("Getting Pokemon");
+
+
 
         Intent intent = getIntent();
         pokeName = intent.getStringExtra("pokeName");
         Log.d(TAG, "onCreate: " + pokeName);
         getPokemon();
-        setViews();
 
 
 
@@ -92,6 +99,7 @@ public class PokeStatsActivity extends AppCompatActivity {
     }
 
     public void getPokemon() {
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -99,7 +107,15 @@ public class PokeStatsActivity extends AppCompatActivity {
                         AppDatabase.class, "pokemonDatabaseModel").build();
                 PokemonDatabaseModel p = db.pokemonDao().findByName(pokeName);
                 Log.d(TAG, "db: " + p.getPokemonName());
+
                 if (p.getStatsJson() == null){
+
+                    PokeStatsActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.show();
+                        }
+                    });
                     retrofit = new Retrofit.Builder()
                             .baseUrl("https://pokeapi.co/api/v2/")
                             .addConverterFactory(GsonConverterFactory.create())
@@ -111,6 +127,14 @@ public class PokeStatsActivity extends AppCompatActivity {
                         public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
                             pokemon = response.body();
                             Log.d(TAG, "getPokemonResponse: " + pokemon.getName());
+                            PokeStatsActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.d(TAG, "setViews ran for get pokemon through retrofit ");
+                                    setViews();
+                                    progressDialog.dismiss();
+                                }
+                            });
                             updatePokemonDatabaseModel();
 
                         }
@@ -135,10 +159,18 @@ public class PokeStatsActivity extends AppCompatActivity {
                             , stats
                             , new Gson().fromJson(pokemonDatabaseModel.getSprite(), Sprites.class)
                             , types, id);
-                    Log.d(TAG, "run: "+ pokemonDatabaseModel.getSprite());
-                    Log.d(TAG, "run: "+ pokemonDatabaseModel.getStatsJson());
-                    Log.d(TAG, "run: "+ pokemonDatabaseModel.getTypesJson());
-                    setViews();
+                    Log.d(TAG, "getPokemon: "+ pokemonDatabaseModel.getSprite());
+                    Log.d(TAG, "getPokemon: "+ pokemonDatabaseModel.getStatsJson());
+                    Log.d(TAG, "getPokemon: "+ pokemonDatabaseModel.getTypesJson());
+
+                    Log.d(TAG, "getPokemon: " + pokemon.getName());
+                    PokeStatsActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(TAG, "setViews ran for get pokemon through database ");
+                            setViews();
+                        }
+                    });
                 }
                 db.close();
             }
