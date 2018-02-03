@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#ffffff"
+
     tools:context="com.nyc.pokedatabase.PokeStatsActivity">
 
     <TextView
@@ -14,12 +16,15 @@
         android:gravity="center"
         android:text="@string/app_name"
         android:textSize="20dp"
+        android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/pokebird"
+        >
 
         <LinearLayout
             android:layout_width="0dp"
@@ -53,7 +58,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="hp"
+                android:text="HP"
+                android:textColor="#ffffff"
                 android:textSize="17sp" />
 
             <TextView
@@ -62,7 +68,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="attack"
+                android:textColor="#ffffff"
+
+                android:text="ATTACK"
                 android:textSize="17sp" />
 
             <TextView
@@ -71,7 +79,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="defense"
+                android:text="DEFENSE"
+                android:textColor="#ffffff"
+
                 android:textSize="17sp" />
 
             <TextView
@@ -79,8 +89,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#ffffff"
+
                 android:gravity="center"
-                android:text="speed"
+                android:text="SPEED"
                 android:textSize="17sp" />
 
             <TextView
@@ -89,7 +101,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="special-attack"
+                android:textColor="#ffffff"
+
+                android:text="SPECIAL ATTACK"
                 android:textSize="17sp" />
 
             <TextView
@@ -98,7 +112,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="special-defense"
+                android:textColor="#ffffff"
+
+                android:text="SPECIAL DEFENSE"
                 android:textSize="17sp" />
 
         </LinearLayout>

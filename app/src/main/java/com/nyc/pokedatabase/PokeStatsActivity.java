@@ -158,12 +158,12 @@ public class PokeStatsActivity extends AppCompatActivity {
         String stat6String = pokemon.getStats().get(5).getStat().getName() + ": " + pokemon.getStats().get(5).getBase_stat();
         String defaultPicUrl = pokemon.getSprites().getFront_default();
         String shinyPicUrl = pokemon.getSprites().getFront_shiny();
-        stat1.setText(stat1String);
-        stat2.setText(stat2String);
-        stat3.setText(stat3String);
-        stat4.setText(stat4String);
-        stat5.setText(stat5String);
-        stat6.setText(stat6String);
+        stat1.setText(stat1String.toUpperCase());
+        stat2.setText(stat2String.toUpperCase());
+        stat3.setText(stat3String.toUpperCase());
+        stat4.setText(stat4String.toUpperCase());
+        stat5.setText(stat5String.toUpperCase());
+        stat6.setText(stat6String.toUpperCase());
         Glide.with(PokeStatsActivity.this)
                 .load(defaultPicUrl)
                 .into(defaultPic);
