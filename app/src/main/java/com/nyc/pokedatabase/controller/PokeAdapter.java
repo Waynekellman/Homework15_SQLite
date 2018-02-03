@@ -43,7 +43,7 @@ public class PokeAdapter extends RecyclerView.Adapter<PokeAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.pokeName.setText(pokemonList.get(position).getName());
+        holder.pokeName.setText(pokemonList.get(position).getName().toUpperCase());
         Glide.with(holder.itemView.getContext())
                 .load(pokemonList.get(position).getSprites().getFront_default())
                 .into(holder.pokeImage);
