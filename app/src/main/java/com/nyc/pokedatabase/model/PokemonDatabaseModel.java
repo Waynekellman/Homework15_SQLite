@@ -5,6 +5,15 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.nyc.pokedatabase.model.objectsPokemon.Sprites;
+import com.nyc.pokedatabase.model.objectsPokemon.Stats;
+import com.nyc.pokedatabase.model.objectsPokemon.Types;
+
+import java.lang.reflect.Type;
+import java.util.List;
+
 /**
  * Created by Wayne Kellman on 1/29/18.
  */
@@ -46,21 +55,36 @@ public class PokemonDatabaseModel {
     }
 
     @Ignore
+    public void setModelFromPokemon(Pokemon pokemon) {
+        this.sprite = (new Gson().toJson(pokemon.getSprites()));
+        this.statsJson = (new Gson().toJson(pokemon.getStats()));
+        this.typesJson = (new Gson().toJson(pokemon.getTypes()));
+
+    }
+
+    @Ignore
+    public Pokemon getPokemon(){
+        Type statsType = new TypeToken<List<Stats>>() {
+        }.getType();
+        Type typesType = new TypeToken<List<Types>>() {
+        }.getType();
+        List<Stats> stats = new Gson().fromJson(statsJson, statsType);
+        List<Types> types = new Gson().fromJson(typesJson, typesType);
+
+        Pokemon pokemon = new Pokemon(pokemonName
+                , stats
+                , new Gson().fromJson(sprite, Sprites.class)
+                , types, pokemonId);
+
+        return pokemon;
+    }
 
 
     public PokemonDatabaseModel() {
     }
 
-    public int getPokemonId() {
-        return pokemonId;
-    }
-
-    public void setPokemonId(int pokemonId) {
-        this.pokemonId = pokemonId;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public int getId() {
+        return id;
     }
 
     public void setPokemonName(String pokemonName) {
@@ -79,8 +103,12 @@ public class PokemonDatabaseModel {
         this.typesJson = typesJson;
     }
 
-    public int getId() {
-        return id;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setPokemonId(int pokemonId) {
+        this.pokemonId = pokemonId;
     }
 
     public String getTypesJson() {
@@ -99,7 +127,7 @@ public class PokemonDatabaseModel {
         return sprite;
     }
 
-    public String getTypes() {
-        return typesJson;
+    public int getPokemonId() {
+        return pokemonId;
     }
 }

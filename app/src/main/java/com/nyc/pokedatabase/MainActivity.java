@@ -101,19 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private void setPokemonList() {
         if (pokemonDatabaseModels.size() > 0) {
             for (PokemonDatabaseModel p : pokemonDatabaseModels) {
-
-                Type statsType = new TypeToken<List<Stats>>() {
-                }.getType();
-                Type typesType = new TypeToken<List<Types>>() {
-                }.getType();
-                List<Stats> stats = new Gson().fromJson(p.getStatsJson(), statsType);
-                List<Types> types = new Gson().fromJson(p.getTypes(), typesType);
-                int id = p.getPokemonId();
-
-                pokemons.add(new Pokemon(p.getPokemonName()
-                        , stats
-                        , new Gson().fromJson(p.getSprite(), Sprites.class)
-                        , types, id));
+            pokemons.add(p.getPokemon());
             }
         }
 
@@ -135,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < pokedex.getPokemon_entries().length; i++) {
                     if (!namesList.contains(pokedex.getPokemon_entries()[i].getPokemon_species().getName())) {
                         Log.d(TAG, "pokedexRetrofitResponse: " + i + " " + pokedex.getPokemon_entries()[i].getPokemon_species().getName());
-                        getPokemon(pokedex.getPokemon_entries()[i].getPokemon_species().getName());
                     }
 
                 }
@@ -182,55 +169,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getPokemon(String name) {
-        Call<Pokemon> getPokemon = service.getPokemon(name);
-        getPokemon.enqueue(new Callback<Pokemon>() {
-            @Override
-            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
-                pokemon = response.body();
-                count++;
-                Log.d(TAG, "getPokemonResponse: " + count + " " + pokemon.getName());
-                pokemons.add(pokemon);
-                updatePokemonDatabaseModel();
-                fragment.initiatePokemon();
 
-            }
-
-            @Override
-            public void onFailure(Call<Pokemon> call, Throwable t) {
-                Log.d(TAG, "getPokemonFailure: " + " " + "pokemon didn't load");
-            }
-        });
-    }
-
-    public void updatePokemonDatabaseModel() {
-        String name = pokemons.get(count - 1).getName();
-        String statsJson = new Gson().toJson(pokemon.getStats());
-        String sprites = new Gson().toJson(pokemon.getSprites());
-        String typesJson = new Gson().toJson(pokemon.getTypes());
-        int pokemonId = pokemons.get(count - 1).getId();
-        PokemonDatabaseModel newModel = new PokemonDatabaseModel(name, statsJson, sprites, typesJson, pokemonId);
-        newPokemonDatabaseModel = new ArrayList<>();
-        newPokemonDatabaseModel.add(newModel);
-
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                db = Room.databaseBuilder(getApplicationContext(),
-                        AppDatabase.class, "pokemonDatabaseModel").build();
-                db.pokemonDao().updatePokemonDatabaseModel(newPokemonDatabaseModel.get(newPokemonDatabaseModel.size() - 1));
-                Log.d(TAG, "updatePokemonDatabaseRun: " + newPokemonDatabaseModel.get(newPokemonDatabaseModel.size() - 1).getPokemonName());
-                db.close();
-            }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
 }

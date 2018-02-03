@@ -1,6 +1,7 @@
 package com.nyc.pokedatabase.controller;
 
 import android.animation.Animator;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.nyc.pokedatabase.PokeStatsActivity;
 import com.nyc.pokedatabase.R;
 import com.nyc.pokedatabase.model.Pokemon;
 
@@ -40,11 +42,19 @@ public class PokeAdapter extends RecyclerView.Adapter<PokeAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.pokeName.setText(pokemonList.get(position).getName());
         Glide.with(holder.itemView.getContext())
                 .load(pokemonList.get(position).getSprites().getFront_default())
                 .into(holder.pokeImage);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(holder.itemView.getContext(), PokeStatsActivity.class);
+                intent.putExtra("pokeName", pokemonList.get(position).getName());
+                holder.itemView.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
